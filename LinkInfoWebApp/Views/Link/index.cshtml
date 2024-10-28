@@ -1,0 +1,51 @@
+﻿@model List<LinkInfoWebApp.Models.Link>
+
+<head>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+
+<h2>Links Guardados</h2>
+
+@if (ViewBag.ResultMessage != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.ResultMessage
+    </div>
+}
+
+<form asp-action="AddUrl" method="post">
+    <input type="text" name="url" placeholder="Ingresa la URL" required />
+    <button type="submit">Guardar</button>
+</form>
+
+<hr />
+
+<form method="get" asp-action="Index">
+    <select name="domainFilter" onchange="this.form.submit()">
+        <option value="">Seleccione un dominio</option>
+        <option value="youtube">YouTube</option>
+        <option value="m.animeflv">AnimeFlv</option>
+        <option value="hentaila">Hentaila</option>
+        <option value="es.pornhub">Pornhub</option>
+        <option value="otros">Otros</option>
+    </select>
+</form>
+
+<ul>
+    @foreach (var link in Model)
+    {
+        <li>
+            <h3>@link.Title</h3>
+            <p>@link.Url</p>
+            @if (!string.IsNullOrEmpty(link.Thumbnail))
+            {
+                <img src="@link.Thumbnail" alt="Miniatura" width="100" />
+            }
+
+            <form asp-action="Delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="@link.Id" />
+                <button type="submit">Eliminar</button>
+            </form>
+        </li>
+    }
+</ul>
